@@ -2862,7 +2862,7 @@ def test_comment():
 
 def test_repr():
     """
-    ` 
+    `
     """
     group([
         ('BACKQUOTE', '`'),
@@ -2874,7 +2874,7 @@ def test_repr():
 
 def test_semicolon():
     """
-     ; 
+     ;
     """
     group([
         ('SPACE', ' '),
@@ -2973,4 +2973,3 @@ def test_space_before_comment():
     ]
 
     )
-

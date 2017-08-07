@@ -751,6 +751,7 @@ def test_class_inherit():
             "fourth_formatting": [{"type": "space", "value": " "}],
             "fifth_formatting": [{"type": "space", "value": " "}],
             "sixth_formatting": [],
+            "arguments": [],
             "inherit_from": [
                 {
                     "type": "name",
@@ -776,6 +777,106 @@ def test_class_inherit():
             ],
         }
     ])
+
+
+def test_class_metaclass():
+    """
+    class A( B, C, metaclass=mymeta, private=True ):
+        pass
+    """
+    parse_multi([
+        ('CLASS', 'class', [], [('SPACE', ' ')]),
+        ('NAME', 'A'),
+        ('LEFT_PARENTHESIS', '(', [], [('SPACE', ' ')]),
+        ('NAME', 'B'),
+        ('COMMA', ',', [], [('SPACE', ' ')]),
+        ('NAME', 'C'),
+        ('COMMA', ',', [], [('SPACE', ' ')]),
+        ('NAME', 'metaclass'),
+        ('EQUAL', '='),
+        ('NAME', 'mymeta'),
+        ('COMMA', ',', [], [('SPACE', ' ')]),
+        ('NAME', 'private'),
+        ('EQUAL', '='),
+        ('NAME', 'True'),
+        ('COMMA', ',', [], [('SPACE', ' ')]),
+        ('RIGHT_PARENTHESIS', ')', [('SPACE', ' ')]),
+        ('COLON', ':'),
+        ('ENDL', '\n', [], [('SPACE', '    ')]),
+        ('INDENT', ''),
+        ('PASS', 'pass'),
+        ('ENDL', '\n', [], []),
+        ('DEDENT', ''),
+    ], [
+        {
+            "type": "class",
+            "name": "A",
+            "decorators": [],
+            "parenthesis": True,
+            "first_formatting": [{"type": "space", "value": " "}],
+            "second_formatting": [],
+            "third_formatting": [{"type": "space", "value": " "}],
+            "fourth_formatting": [{"type": "space", "value": " "}],
+            "fifth_formatting": [],
+            "sixth_formatting": [],
+            'arguments': [
+                {'first_formatting': [],
+                 'second_formatting': [],
+                 'target': {'type': 'name', 'value': 'metaclass'},
+                 'type': 'def_argument',
+                 'value': {'type': 'name', 'value': 'mymeta'}},
+                {'first_formatting': [],
+                 'second_formatting': [{'type': 'space', 'value': ' '}],
+                 'type': 'comma'},
+                {'first_formatting': [],
+                 'second_formatting': [],
+                 'target': {'type': 'name', 'value': 'private'},
+                 'type': 'def_argument',
+                 'value': {'type': 'name', 'value': 'True'}},
+                {'first_formatting': [],
+                 'second_formatting': [{'type': 'space', 'value': ' '}],
+                 'type': 'comma'}
+            ],
+            "inherit_from": [
+                {
+                    "type": "name",
+                    "value": "B"
+                },
+                {
+                    'first_formatting': [],
+                    'second_formatting': [{'type': 'space', 'value': ' '}],
+                    'type': 'comma',
+                },
+                {
+                    "type": "name",
+                    "value": "C"
+                },
+                {
+                    'first_formatting': [],
+                    'second_formatting': [{'type': 'space', 'value': ' '}],
+                    'type': 'comma',
+                },
+            ],
+            "value": [
+                {
+                    "type": "endl",
+                    "value": "\n",
+                    "formatting": [],
+                    "indent": "    "
+                },
+                {
+                    "type": "pass",
+                },
+                {
+                    "formatting": [],
+                    "indent": "",
+                    "type": "endl",
+                    "value": "\n"
+                }
+            ],
+        }
+    ])
+
 
 def test_funcdef_stmt_one_start_parameter_indent():
     """

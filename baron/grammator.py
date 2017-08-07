@@ -261,9 +261,39 @@ def generate_parse(print_function):
         }]
 
 
-    @pg.production("classdef : CLASS NAME LEFT_PARENTHESIS testlist RIGHT_PARENTHESIS COLON suite")
+
+    @pg.production("classargs : inherits parameters")
+    def classarg1(pack, ):
+        (inherits_, testlist_,) = pack
+        print(inherits_)
+        return {
+            "inherit_from": inherits_,
+            "arguments": testlist_,
+        }
+
+    @pg.production("inherits : inherits inherit")
+    def classarg3(pack, ):
+        (inherits_, inherit_) = pack
+        return inherits_ + inherit_
+
+    @pg.production("inherits : inherit")
+    def classarg4(pack, ):
+        (inherit_,) = pack
+        return inherit_
+
+    @pg.production("inherit : name")
+    def classarg5(pack):
+        (name,) = pack
+        return name
+
+    @pg.production("inherit : name comma")
+    def classarg5(pack):
+        (name, comma,) = pack
+        return [name, comma]
+
+    @pg.production("classdef : CLASS NAME LEFT_PARENTHESIS classargs RIGHT_PARENTHESIS COLON suite")
     def class_stmt_inherit(pack,):
-        (class_, name, left_parenthesis, testlist, right_parenthesis, colon, suite) = pack
+        (class_, name, left_parenthesis, classargs_, right_parenthesis, colon, suite) = pack
         return [{
             "type": "class",
             "name": name.value,
@@ -274,7 +304,8 @@ def generate_parse(print_function):
             "fourth_formatting": right_parenthesis.hidden_tokens_before,
             "fifth_formatting": right_parenthesis.hidden_tokens_after + colon.hidden_tokens_before,
             "sixth_formatting": colon.hidden_tokens_after,
-            "inherit_from": [testlist],
+            "inherit_from": classargs_['inherit_from'],
+            "arguments": classargs_['arguments'],
             "decorators": [],
             "value": suite,
         }]
